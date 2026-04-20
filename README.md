@@ -1,4 +1,4 @@
-# HNSCclassifier: An R package for molecular subtypes prediction of head and neck squamous cell carcinoma
+# HNSCclassifier: An R Package to Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma
 
 **Install package**
 
