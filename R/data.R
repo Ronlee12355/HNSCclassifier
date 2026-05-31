@@ -35,10 +35,6 @@
 
 
 #' TCGA LUSC gene expression subset (Ensembl IDs, log2 TPM)
-#' A version of the `TCGA_LUSC` dataset in which the rownames have been
-#' converted from official gene symbols to Ensembl gene IDs. This dataset
-#' is intended to demonstrate the `idType = "ENSEMBL"` functionality of the
-#' `classifyHNSC()` function.
 #'
 #' @format A numeric matrix with 22,962 rows (Ensembl IDs) and 50 columns
 #'   (primary tumor samples):
@@ -55,6 +51,8 @@
 #' converted to Ensembl IDs using `AnnotationDbi::mapIds` with
 #' `keytype = "SYMBOL"` and `column = "ENSEMBL"`. Expression values are
 #' identical to the corresponding rows of `TCGA_LUSC` (log2(TPM + 1)).
+#' This dataset is intended to demonstrate the `idType = "ENSEMBL"` functionality of the
+#' `classifyHNSC()` function.
 #'
 #' This dataset is used in the vignette and examples to show how
 #' `classifyHNSC()` handles non-symbol input and performs automatic ID

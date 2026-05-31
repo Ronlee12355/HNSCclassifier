@@ -3,11 +3,7 @@
 \docType{data}
 \name{TCGA_LUSC_ENSEMBL}
 \alias{TCGA_LUSC_ENSEMBL}
-\title{TCGA LUSC gene expression subset (Ensembl IDs, log2 TPM)
-A version of the \code{TCGA_LUSC} dataset in which the rownames have been
-converted from official gene symbols to Ensembl gene IDs. This dataset
-is intended to demonstrate the \code{idType = "ENSEMBL"} functionality of the
-\code{classifyHNSC()} function.}
+\title{TCGA LUSC gene expression subset (Ensembl IDs, log2 TPM)}
 \format{
 A numeric matrix with 22,962 rows (Ensembl IDs) and 50 columns
 (primary tumor samples):
@@ -25,16 +21,14 @@ data(TCGA_LUSC_ENSEMBL)
 }
 \description{
 TCGA LUSC gene expression subset (Ensembl IDs, log2 TPM)
-A version of the \code{TCGA_LUSC} dataset in which the rownames have been
-converted from official gene symbols to Ensembl gene IDs. This dataset
-is intended to demonstrate the \code{idType = "ENSEMBL"} functionality of the
-\code{classifyHNSC()} function.
 }
 \details{
 The matrix is identical of \code{TCGA_LUSC}, with rownames
 converted to Ensembl IDs using \code{AnnotationDbi::mapIds} with
 \code{keytype = "SYMBOL"} and \code{column = "ENSEMBL"}. Expression values are
 identical to the corresponding rows of \code{TCGA_LUSC} (log2(TPM + 1)).
+This dataset is intended to demonstrate the \code{idType = "ENSEMBL"} functionality of the
+\code{classifyHNSC()} function.
 
 This dataset is used in the vignette and examples to show how
 \code{classifyHNSC()} handles non-symbol input and performs automatic ID

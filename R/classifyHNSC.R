@@ -81,12 +81,12 @@
 #' @examples
 #' \dontrun{
 #' # Example with gene symbols (default)
-#' data(hnsc_example_expr)
-#' subtypes <- classifyHNSC(hnsc_example_expr, outputType = "class")
+#' data(TCGA_LUSC)
+#' subtypes <- classifyHNSC(TCGA_LUSC, outputType = "class")
 #'
 #' # Example with Ensembl IDs
 #' # Ensure org.Hs.eg.db is installed
-#' subtypes_ens <- classifyHNSC(ensembl_expr_matrix,
+#' subtypes_ens <- classifyHNSC(TCGA_LUSC_ENSEMBL,
 #'                              idType = "ENSEMBL",
 #'                              outputType = "prob")
 #' }
