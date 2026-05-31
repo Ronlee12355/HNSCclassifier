@@ -26,7 +26,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 # Install required Bioconductor packages
-BiocManager::install(c("GSVA", "org.Hs.eg.db", "AnnotationDbi", 'shiny','DT','shinythemes','randomForest'))
+BiocManager::install(c("GSVA", "org.Hs.eg.db", "AnnotationDbi", 'shiny','DT','shinythemes','randomForest','shinyjs'))
 
 # Install HNSCclassifier from GitHub
 if (!requireNamespace("remotes", quietly = TRUE))

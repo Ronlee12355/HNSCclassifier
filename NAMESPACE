@@ -2,10 +2,8 @@
 
 export(classifyHNSC)
 export(classifyHNSC_interface)
-import(DT)
 import(org.Hs.eg.db)
 import(randomForest)
-import(shinythemes)
 importFrom(AnnotationDbi,select)
 importFrom(GSVA,gsva)
 importFrom(GSVA,ssgseaParam)

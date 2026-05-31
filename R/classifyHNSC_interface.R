@@ -20,8 +20,6 @@
 #'
 #' @seealso \code{\link{classifyHNSC}} for the command-line version of the
 #'   classifier.
-#' @import DT
-#' @import shinythemes
 #' @export
 #'
 #' @examples
@@ -30,6 +28,12 @@
 #' classifyHNSC_interface()
 #' }
 classifyHNSC_interface <-  function(){
+  required_pkgs <- c("DT", "shinythemes", "shinyjs")
+  missing <- required_pkgs[!vapply(required_pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1))]
+  if (length(missing) > 0) {
+    stop("The following packages are needed for the Shiny interface. ",
+         "Please install them: ", paste(missing, collapse = ", "))
+  }
   appDir <- system.file('shinyApp', package = 'HNSCclassifier')
 
   if (appDir == '') {

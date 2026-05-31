@@ -10,7 +10,6 @@ Description: Description: This package provides a robust classifier to assign he
     enrichment (ssGSEA) and a pre-trained random forest model. The package
     includes a command-line function for batch prediction and an interactive
     Shiny web interface for users without programming experience.
-License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -23,12 +22,14 @@ Imports:
     GSVA,
     randomForest,
     shiny,
-    DT,
     AnnotationDbi,
     org.Hs.eg.db,
-    shinythemes
 Suggests:
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    DT,
+    shinythemes,
+    shinyjs
 VignetteBuilder: knitr
+License: GPL (>= 3)
