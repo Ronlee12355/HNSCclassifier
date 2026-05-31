@@ -20,7 +20,8 @@
 #'
 #' @seealso \code{\link{classifyHNSC}} for the command-line version of the
 #'   classifier.
-#'
+#' @import DT
+#' @import shinythemes
 #' @export
 #'
 #' @examples
