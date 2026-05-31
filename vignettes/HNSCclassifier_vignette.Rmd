@@ -22,16 +22,41 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-The `HNSCclassifier` package provides a ready-to-use tool for
-classifying head and neck squamous cell carcinoma samples into
-the established TCGA molecular subtypes (Atypical, Basal, Classical,
-Mesenchymal). It uses a pathway-level normalization strategy based on
-ssGSEA and a pre-trained random forest model.
+Head and Neck Squamous Cell Carcinoma (HNSCC) is a molecularly
+heterogeneous disease, and its classification into distinct subtypes —
+**Atypical**, **Basal**, **Classical**, and **Mesenchymal** — has
+important implications for prognosis and therapeutic strategy. The
+`HNSCclassifier` package provides a ready-to-use tool for assigning
+HNSCC samples to these TCGA-established molecular subtypes. The
+classifier employs a **pathway-level normalization strategy** that first
+converts gene expression profiles into pathway enrichment scores via
+single-sample Gene Set Enrichment Analysis (ssGSEA), then applies a
+pre-trained random forest model for final subtype prediction. This
+design minimises cross-platform technical variation, making the
+classifier applicable to both RNA-seq and microarray data.
 
 ## Installation
 
+Before installing `HNSCclassifier`, ensure that the required
+Bioconductor dependencies are available:
+
 ```{r, eval = FALSE}
-# Install from GitHub
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c("GSVA", "org.Hs.eg.db", "AnnotationDbi",
+                       "randomForest", "shiny", "DT",
+                       "shinythemes", "shinyjs"))
+```
+
+These packages provide the ssGSEA algorithm (`GSVA`) and the gene
+annotation database (`org.Hs.eg.db`) used for identifier conversion. If
+you plan to use the interactive Shiny interface, additionally install
+`shiny`, `DT`, `shinythemes`, and `shinyjs`.
+
+Once the dependencies are in place, install `HNSCclassifier` from
+GitHub:
+
+```{r, eval = FALSE}
 if (!requireNamespace("devtools", quietly = TRUE))
     install.packages("devtools")
 devtools::install_github("Ronlee12355/HNSCclassifier")
@@ -39,12 +64,21 @@ devtools::install_github("Ronlee12355/HNSCclassifier")
 
 ## Quick start
 
-To classify your HNSCC samples, load the package, prepare a gene
-expression matrix with gene symbols in rows and sample identifiers in
-columns, and call `classifyHNSC()`. The function returns either the
-predicted molecular subtype for each sample or a matrix of class
-probabilities, depending on the `outputType` argument. A small built-in
-example dataset is included to illustrate the typical workflow.
+The classification workflow is straightforward: load the package,
+prepare a numeric gene expression matrix with genes as rows and samples
+as columns, and call `classifyHNSC()`. The function internally performs
+input validation, optional log2 transformation, gene identifier
+conversion (if needed), ssGSEA-based pathway scoring, and random forest
+prediction — all in a single step. The `outputType` argument controls
+whether the function returns predicted subtype **class labels** or a
+**probability matrix** showing the posterior probability for each of the
+four subtypes.
+
+A built-in example dataset, `TCGA_LUSC`, is provided for demonstration.
+It contains 50 TCGA lung squamous cell carcinoma samples with 22,962
+genes in log2(TPM + 1) scale. While the dataset originates from a lung
+cancer project, it serves as a convenient test case to verify that the
+classifier runs correctly with your setup.
 
 ```{r, message = FALSE}
 library(HNSCclassifier)
@@ -64,14 +98,24 @@ head(probs)
 
 ## Handling different gene ID types
 
-If the rownames of your expression matrix are not gene symbols, you can
-use the `idType` argument to specify the identifier type (e.g.
-`"ENSEMBL"`, `"ENTREZID"`, or `"REFSEQ"`). The function will
-automatically convert them to official gene symbols using the
-**org.Hs.eg.db** annotation package (which must be installed
-beforehand). When multiple IDs map to the same gene symbol, the maximum
-expression value is retained. After conversion, the classification
-proceeds exactly as with symbol-based input.
+Gene expression data from different bioinformatics pipelines often use
+different gene identifier systems. The `classifyHNSC()` function
+supports four common identifier types via the `idType` parameter:
+
+- `"SYMBOL"` (default) — official HGNC gene symbols, e.g. *TP53*
+- `"ENSEMBL"` — Ensembl gene IDs, e.g. *ENSG00000141510*
+- `"ENTREZID"` — NCBI Entrez Gene IDs, e.g. *7157*
+- `"REFSEQ"` — RefSeq accession numbers, e.g. *NM_000546*
+
+When `idType` is not `"SYMBOL"`, the function automatically maps the
+input identifiers to official gene symbols using the **org.Hs.eg.db**
+annotation package. A common scenario where multiple input IDs map to
+the same symbol is handled by retaining the **maximum expression value**
+across the duplicates, thereby preserving the most biologically
+informative signal. After conversion, the rest of the pipeline (log2
+check, ssGSEA, random forest prediction) proceeds identically to
+symbol-based input. The built-in dataset `TCGA_LUSC_ENSEMBL` provides a
+ready-to-use example with Ensembl identifiers.
 
 ```{r, message = FALSE}
 # For Ensembl IDs
@@ -81,12 +125,31 @@ table(res)
 
 ## Launching the Shiny interface
 
-For users who prefer a point-and-click interface, the package includes
-an interactive Shiny web application. It accepts gene expression
-matrices in CSV or tab-delimited format, automatically handles ID
-conversion and classification, and displays both subtype assignments and
-probability heatmaps. Ensure that **shiny** and **DT** are installed,
-then launch the app with:
+For users who prefer a graphical, point-and-click experience over
+writing R code, the package includes an interactive Shiny web
+application. The app provides a user-friendly interface for uploading
+expression data, configuring classification parameters, and exploring
+results — all within a web browser.
+
+The app interface is organised into three tabs:
+
+1. **Predict** — Upload a CSV or tab-delimited gene expression matrix
+   (max 50 MB), select the gene identifier type and desired output
+   format, and run the classifier. Results are displayed in an
+   interactive table with copy, CSV, and Excel export options. A
+   downloadable example file is provided to help users prepare their
+   data in the correct format.
+2. **Tutorial** — Step-by-step instructions on preparing an expression
+   matrix, uploading data, and interpreting classification results.
+3. **Contact** — Author information and a direct link to the GitHub
+   Issues page for support.
+
+The app performs the same underlying classification pipeline as the
+command-line function, so results are identical regardless of the
+interface chosen.
+
+Ensure that **shiny**, **DT**, **shinythemes**, and **shinyjs** are
+installed before launching:
 
 ```{r, eval = FALSE}
 classifyHNSC_interface()
