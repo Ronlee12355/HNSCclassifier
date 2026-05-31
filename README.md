@@ -1,7 +1,6 @@
 # HNSCclassifier: An R Package to Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/Ronlee12355/HNSCclassifier/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Ronlee12355/HNSCclassifier/actions/workflows/R-CMD-check.yaml)
 [![License: GPL-3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 <!-- badges: end -->
 
@@ -33,6 +32,24 @@ BiocManager::install(c("GSVA", "org.Hs.eg.db", "AnnotationDbi", 'shiny','DT','sh
 if (!requireNamespace("remotes", quietly = TRUE))
     install.packages("remotes")
 remotes::install_github("Ronlee12355/HNSCclassifier")
+
+```
+
+## Quick start
+```r
+library(HNSCclassifier)
+# Predict subtypes
+subtypes <- classifyHNSC(TCGA_LUSC, outputType = "class")
+table(subtypes)
+
+# Get probabilities
+probs <- classifyHNSC(TCGA_LUSC, outputType = "prob")
+head(probs)
+
+# For Ensembl IDs
+res <- classifyHNSC(TCGA_LUSC_ENSEMBL, idType = "ENSEMBL")
+table(res)
+
 ```
 
 ## References
