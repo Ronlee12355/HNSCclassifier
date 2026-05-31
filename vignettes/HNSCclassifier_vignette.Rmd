@@ -1,0 +1,99 @@
+---
+title: "HNSCclassifier: An R Package to Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma"
+author: "Jiang Li"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+keywords: "HNSCC, classification, TCGA, ssGSEA, R package"
+vignette: >
+  %\VignetteIndexEntry{HNSCclassifier Introduction}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+The `HNSCclassifier` package provides a ready-to-use tool for
+classifying head and neck squamous cell carcinoma samples into
+the established TCGA molecular subtypes (Atypical, Basal, Classical,
+Mesenchymal). It uses a pathway-level normalization strategy based on
+ssGSEA and a pre-trained random forest model.
+
+## Installation
+
+```{r, eval = FALSE}
+# Install from GitHub
+if (!requireNamespace("devtools", quietly = TRUE))
+    install.packages("devtools")
+devtools::install_github("Ronlee12355/HNSCclassifier")
+```
+
+## Quick start
+
+To classify your HNSCC samples, load the package, prepare a gene
+expression matrix with gene symbols in rows and sample identifiers in
+columns, and call `classifyHNSC()`. The function returns either the
+predicted molecular subtype for each sample or a matrix of class
+probabilities, depending on the `outputType` argument. A small built-in
+example dataset is included to illustrate the typical workflow.
+
+```{r, message = FALSE}
+library(HNSCclassifier)
+
+# Example: a toy expression matrix (genes as rows, samples as columns)
+# Here we load a small built-in dataset for demonstration
+data("TCGA_LUSC")
+
+# Predict subtypes
+subtypes <- classifyHNSC(TCGA_LUSC, outputType = "class")
+table(subtypes)
+
+# Get probabilities
+probs <- classifyHNSC(TCGA_LUSC, outputType = "prob")
+head(probs)
+```
+
+## Handling different gene ID types
+
+If the rownames of your expression matrix are not gene symbols, you can
+use the `idType` argument to specify the identifier type (e.g.
+`"ENSEMBL"`, `"ENTREZID"`, or `"REFSEQ"`). The function will
+automatically convert them to official gene symbols using the
+**org.Hs.eg.db** annotation package (which must be installed
+beforehand). When multiple IDs map to the same gene symbol, the maximum
+expression value is retained. After conversion, the classification
+proceeds exactly as with symbol-based input.
+
+```{r, message = FALSE}
+# For Ensembl IDs
+res <- classifyHNSC(TCGA_LUSC_ENSEMBL, idType = "ENSEMBL")
+table(res)
+```
+
+## Launching the Shiny interface
+
+For users who prefer a point-and-click interface, the package includes
+an interactive Shiny web application. It accepts gene expression
+matrices in CSV or tab-delimited format, automatically handles ID
+conversion and classification, and displays both subtype assignments and
+probability heatmaps. Ensure that **shiny** and **DT** are installed,
+then launch the app with:
+
+```{r, eval = FALSE}
+classifyHNSC_interface()
+```
+
+## Session info
+
+```{r}
+sessionInfo()
+```

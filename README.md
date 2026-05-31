@@ -10,11 +10,6 @@
   if(!requireNamespace('devtools')){
     install.packages('devtools')
   }
-
-  ## Users need to install these packages before using GCclassifier
-  BiocManager::install(c(
-    'impute', 'dplyr', 'magrittr', 'randomForest', 
-   'shiny', 'DT', 'shinyjs', 'BiocStyle', 'survminer'), force = T)
   
   ### install: latest version (R version >= 4.1.0 required)
   ### build_vignettes = T, if installing using RStudio
