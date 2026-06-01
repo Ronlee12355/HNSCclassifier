@@ -13,8 +13,6 @@ title: "HNSCclassifier: Predict Molecular Subtypes of Head and Neck Squamous Cel
 
 <img src="https://github.com/Ronlee12355/HNSCclassifier/blob/main/HNSCclassifier.png" height="230" align="right"/>
 An R package for robust molecular subtype classification of **Head and Neck Squamous Cell Carcinoma (HNSCC)**. This classifier assigns tumour samples to one of four TCGA-defined molecular subtypes — **Atypical**, **Basal**, **Classical**, and **Mesenchymal** — using a pre-trained random forest model coupled with pathway-level normalisation via single-sample gene set enrichment analysis (ssGSEA).
-
-> **Why pathway-level normalisation?** Gene expression data from different platforms (RNA-seq vs. microarray, different batches) can exhibit substantial technical variation at the individual gene level. By converting gene-level expression to pathway-level enrichment scores via ssGSEA, the classifier captures higher-level biological signals that are more reproducible across platforms, ensuring cross-study and cross-platform portability.
 ---
 
 ## Table of Contents
