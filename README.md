@@ -1,27 +1,31 @@
+---
+title: "HNSCclassifier: Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma"
+---
+
 # HNSCclassifier: Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma
 
 <!-- badges: start -->
-[![License: GPL-3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![R >= 4.3](https://img.shields.io/badge/R-≥%204.3-brightgreen)](https://www.r-project.org/)
-[![GitHub release](https://img.shields.io/github/v/release/Ronlee12355/HNSCclassifier)](https://github.com/Ronlee12355/HNSCclassifier/releases)
-[![Bioconductor](https://img.shields.io/badge/Bioconductor-GSVA%2C%20org.Hs.eg.db-blue)](https://www.bioconductor.org/)
+<a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" height="20"></a>
+<a href="https://www.r-project.org/"><img src="https://img.shields.io/badge/R-%E2%89%A5%204.3-brightgreen" height="20"></a>
+<a href="https://github.com/Ronlee12355/HNSCclassifier/releases"><img src="https://img.shields.io/github/v/release/Ronlee12355/HNSCclassifier" height="20"></a>
+<a href="https://www.bioconductor.org/"><img src="https://img.shields.io/badge/Bioconductor-GSVA%7Corg.Hs.eg.db-blue" height="20"></a>
 <!-- badges: end -->
 
+<img src="https://github.com/Ronlee12355/HNSCclassifier/blob/main/HNSCclassifier.png" height="230" align="right"/>
 An R package for robust molecular subtype classification of **Head and Neck Squamous Cell Carcinoma (HNSCC)**. This classifier assigns tumour samples to one of four TCGA-defined molecular subtypes — **Atypical**, **Basal**, **Classical**, and **Mesenchymal** — using a pre-trained random forest model coupled with pathway-level normalisation via single-sample gene set enrichment analysis (ssGSEA).
 
 > **Why pathway-level normalisation?** Gene expression data from different platforms (RNA-seq vs. microarray, different batches) can exhibit substantial technical variation at the individual gene level. By converting gene-level expression to pathway-level enrichment scores via ssGSEA, the classifier captures higher-level biological signals that are more reproducible across platforms, ensuring cross-study and cross-platform portability.
-
 ---
 
 ## Table of Contents
 
 - [Molecular Subtypes of HNSCC](#molecular-subtypes-of-hnscc)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
 - [Features](#features)
 - [Classification Workflow](#classification-workflow)
 - [Built-in Datasets](#built-in-datasets)
 - [Shiny Web Interface](#shiny-web-interface)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
 - [References](#references)
 
 ---
@@ -32,12 +36,86 @@ Head and Neck Squamous Cell Carcinoma is a heterogeneous disease with distinct m
 
 | Subtype | Key Characteristics |
 |---|---|
-| **Atypical** (formerly "HPV-like") | Enriched for HPV-positive tumours; improved prognosis; p16<sup>INK4A</sup> overexpression; CDKN2A silencing less common |
+| **Atypical** | Enriched for HPV-positive tumours; improved prognosis; p16<sup>INK4A</sup> overexpression; CDKN2A silencing less common |
 | **Basal** | Expression patterns resembling basal epithelial cells; enrichments in epidermal development and extracellular matrix organisation genes |
 | **Classical** | Heavy smoking association; the most prevalent subtype; characterised by xenobiotic metabolism, KEAP1/NRF2 pathway alterations, and oxidative stress gene signatures |
 | **Mesenchymal** | Epithelial–mesenchymal transition (EMT) features; invasive/migratory phenotype; TGF-β signalling activation; poorest prognosis among the four subtypes |
 
 Subtype information can guide prognosis stratification and may inform treatment selection in the context of clinical trials and translational research.
+
+---
+
+## Installation
+
+The package depends on several Bioconductor packages. Install them first, then install `HNSCclassifier` from GitHub.
+
+### Step 1: Install Bioconductor dependencies
+
+```r
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("GSVA", "org.Hs.eg.db", "AnnotationDbi"))
+```
+
+### Step 2: Install optional dependencies (for the Shiny app)
+
+```r
+BiocManager::install(c("shiny", "DT", "shinythemes", "shinyjs"))
+```
+
+### Step 3: Install HNSCclassifier
+
+```r
+if (!requireNamespace("remotes", quietly = TRUE))
+    install.packages("remotes")
+remotes::install_github("Ronlee12355/HNSCclassifier")
+```
+
+### Step 4: Load the package
+
+```r
+library(HNSCclassifier)
+# Startup message: 'HNSCclassifier v0.1.0'
+```
+
+---
+
+## Quick Start
+
+### Basic classification
+
+```r
+library(HNSCclassifier)
+
+# Load example dataset
+data(TCGA_LUSC)
+
+# Predict molecular subtypes (output: class labels)
+subtypes <- classifyHNSC(TCGA_LUSC, outputType = "class")
+table(subtypes)
+#   Atypical      Basal   Classical Mesenchymal
+#          7         15         20          8
+
+# Get posterior probabilities for each subtype
+probs <- classifyHNSC(TCGA_LUSC, outputType = "prob")
+head(probs)
+```
+
+### Using different gene identifier types
+
+```r
+# With Ensembl IDs
+data(TCGA_LUSC_ENSEMBL)
+res <- classifyHNSC(TCGA_LUSC_ENSEMBL, idType = "ENSEMBL")
+table(res)
+```
+
+### Launch the Shiny app
+
+```r
+classifyHNSC_interface()
+```
 
 ---
 
@@ -117,7 +195,7 @@ This design mirrors the approach described in the package methodology, where the
 
 ## Built-in Datasets
 
-The package includes two example datasets derived from **TCGA Lung Squamous Cell Carcinoma (LUSC)** project ([GDC portal](https://portal.gdc.cancer.gov/projects/TCGA-LUSC)) to help users get started immediately:
+The package includes two example datasets derived from the **TCGA Lung Squamous Cell Carcinoma (LUSC)** project ([GDC portal](https://portal.gdc.cancer.gov/projects/TCGA-LUSC)) to help users get started immediately:
 
 | Dataset | Rows | Columns | Description |
 |---|---|---|---|
@@ -157,78 +235,6 @@ Step-by-step instructions guiding users through:
 Author contact information and a link to the [GitHub Issues](https://github.com/Ronlee12355/HNSCclassifier/issues) page for bug reports and feature requests.
 
 ---
-
-## Installation
-
-The package depends on several Bioconductor packages. Install them first, then install `HNSCclassifier` from GitHub.
-
-### Step 1: Install Bioconductor dependencies
-
-```r
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install(c("GSVA", "org.Hs.eg.db", "AnnotationDbi"))
-```
-
-### Step 2: Install optional dependencies (for the Shiny app)
-
-```r
-BiocManager::install(c("shiny", "DT", "shinythemes", "shinyjs"))
-```
-
-### Step 3: Install HNSCclassifier
-
-```r
-if (!requireNamespace("remotes", quietly = TRUE))
-    install.packages("remotes")
-remotes::install_github("Ronlee12355/HNSCclassifier")
-```
-
-### Step 4: Load the package
-
-```r
-library(HNSCclassifier)
-# Startup message: 'HNSCclassifier v0.1.0'
-```
-
----
-
-## Quick Start
-
-### Basic classification
-
-```r
-library(HNSCclassifier)
-
-# Load example dataset
-data(TCGA_LUSC)
-
-# Predict molecular subtypes (output: class labels)
-subtypes <- classifyHNSC(TCGA_LUSC, outputType = "class")
-table(subtypes)
-#   Atypical      Basal   Classical Mesenchymal
-#          7         15         20          8
-
-# Get posterior probabilities for each subtype
-probs <- classifyHNSC(TCGA_LUSC, outputType = "prob")
-head(probs)
-```
-
-### Using different gene identifier types
-
-```r
-# With Ensembl IDs
-data(TCGA_LUSC_ENSEMBL)
-res <- classifyHNSC(TCGA_LUSC_ENSEMBL, idType = "ENSEMBL")
-table(res)
-```
-
-### Launch the Shiny app
-
-```r
-classifyHNSC_interface()
-```
 
 ## References
 
