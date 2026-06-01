@@ -1,7 +1,3 @@
----
-title: "HNSCclassifier: Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma"
----
-
 # HNSCclassifier: Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma
 
 <!-- badges: start -->
@@ -9,13 +5,11 @@ title: "HNSCclassifier: Predict Molecular Subtypes of Head and Neck Squamous Cel
 <a href="https://www.r-project.org/"><img src="https://img.shields.io/badge/R-%E2%89%A5%204.3-brightgreen" height="20"></a>
 <a href="https://github.com/Ronlee12355/HNSCclassifier/releases"><img src="https://img.shields.io/github/v/release/Ronlee12355/HNSCclassifier" height="20"></a>
 <a href="https://www.bioconductor.org/"><img src="https://img.shields.io/badge/Bioconductor-GSVA%7Corg.Hs.eg.db-blue" height="20"></a>
+<img src="https://github.com/Ronlee12355/HNSCclassifier/blob/main/HNSCclassifier.png" height="150" align="right"/>
 <!-- badges: end -->
-
-<img src="https://github.com/Ronlee12355/HNSCclassifier/blob/main/HNSCclassifier.png" height="230" align="right"/>
 
 An R package for robust molecular subtype classification of **Head and Neck Squamous Cell Carcinoma (HNSCC)**. This classifier assigns tumour samples to one of four TCGA-defined molecular subtypes — **Atypical**, **Basal**, **Classical**, and **Mesenchymal** — using a pre-trained random forest model coupled with pathway-level normalisation via single-sample gene set enrichment analysis (ssGSEA).
 
----
 
 ## Table of Contents
 
