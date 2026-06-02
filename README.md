@@ -70,7 +70,6 @@ remotes::install_github("Ronlee12355/HNSCclassifier")
 
 ```r
 library(HNSCclassifier)
-# Startup message: 'HNSCclassifier v0.1.0'
 ```
 
 ---
@@ -88,8 +87,6 @@ data(TCGA_LUSC)
 # Predict molecular subtypes (output: class labels)
 subtypes <- classifyHNSC(TCGA_LUSC, outputType = "class")
 table(subtypes)
-#   Atypical      Basal   Classical Mesenchymal
-#          7         15         20          8
 
 # Get posterior probabilities for each subtype
 probs <- classifyHNSC(TCGA_LUSC, outputType = "prob")
