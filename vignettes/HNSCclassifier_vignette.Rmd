@@ -35,6 +35,31 @@ pre-trained random forest model for final subtype prediction. This
 design minimises cross-platform technical variation, making the
 classifier applicable to both RNA-seq and microarray data.
 
+## Molecular Subtypes of HNSCC
+
+Head and Neck Squamous Cell Carcinoma is a heterogeneous disease with distinct molecular subtypes that differ in their biology, clinical outcomes, and therapeutic responses. The four subtypes, originally characterised by The Cancer Genome Atlas (TCGA) and Walter et al., are:
+
+| Subtype | Key Characteristics |
+|---|---|
+| **Atypical** | Enriched for HPV-positive tumours; improved prognosis; p16<sup>INK4A</sup> overexpression; CDKN2A silencing less common |
+| **Basal** | Expression patterns resembling basal epithelial cells; enrichments in epidermal development and extracellular matrix organisation genes |
+| **Classical** | Heavy smoking association; the most prevalent subtype; characterised by xenobiotic metabolism, KEAP1/NRF2 pathway alterations, and oxidative stress gene signatures |
+| **Mesenchymal** | Epithelial–mesenchymal transition (EMT) features; invasive/migratory phenotype; TGF-β signalling activation; poorest prognosis among the four subtypes |
+
+Subtype information can guide prognosis stratification and may inform treatment selection in the context of clinical trials and translational research.
+
+## Features
+
+- **Command-line interface**: [`classifyHNSC()`](#quick-start) for batch prediction from a numeric gene expression matrix — ideal for processing large cohorts or integrating into downstream pipelines.
+- **Interactive Shiny app**: [`classifyHNSC_interface()`](#shiny-web-interface) for users who prefer a graphical, point-and-click experience.
+- **Multi-platform identifier support**: accepts gene symbols, Ensembl IDs, Entrez IDs, or RefSeq accession numbers. Automatic conversion is performed via `org.Hs.eg.db`.
+- **Flexible output**: return predicted subtype **class labels** (`"class"`) or a **probability matrix** (`"prob"`) showing posterior probabilities for each of the four subtypes.
+- **Cross-platform robustness**: designed to work with RNA-seq (TPM, FPKM, or normalised counts) and microarray expression data after log2 transformation.
+- **Automatic preprocessing**: input validation, log2 transformation detection and application, and gene-level noise reduction (zero-variance gene filtering) are handled internally.
+- **Curated pathway gene sets**: built with a carefully selected collection of pathway gene sets (`required.sets`) for ssGSEA, bridging any input dataset to the model's training feature space.
+- **Pre-trained random forest model**: ships with a fully trained `randomForest` object (`finalModel`) — no need for users to train or tune any model.
+
+
 ## Installation
 
 Before installing `HNSCclassifier`, ensure that the required

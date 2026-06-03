@@ -27,17 +27,25 @@
 #' # Start the Shiny app with default settings
 #' classifyHNSC_interface()
 #' }
-classifyHNSC_interface <-  function(){
-  required_pkgs <- c("DT", "shinythemes", "shinyjs")
-  missing <- required_pkgs[!vapply(required_pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1))]
+classifyHNSC_interface <-  function() {
+  required_pkgs <- c("DT", "shinythemes", "shinyjs", 'shiny')
+  missing <- required_pkgs[!vapply(required_pkgs,
+                                   requireNamespace,
+                                   quietly = TRUE,
+                                   FUN.VALUE = logical(1))]
   if (length(missing) > 0) {
-    stop("The following packages are needed for the Shiny interface. ",
-         "Please install them: ", paste(missing, collapse = ", "))
+    stop(
+      "The following packages are needed for the Shiny interface. ",
+      "Please install them: ",
+      paste(missing, collapse = ", ")
+    )
   }
   appDir <- system.file('shinyApp', package = 'HNSCclassifier')
 
   if (appDir == '') {
-    stop('Could not load shiny directory. Try re-install HNSCclassifier')
+    stop(
+      'Could not load shiny directory. Try re-install HNSCclassifier package.'
+    )
   }
 
   shiny::runApp(appDir, display.mode = 'normal')

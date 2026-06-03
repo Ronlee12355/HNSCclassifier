@@ -22,6 +22,8 @@ Imports:
     GSVA,
     randomForest,
     shiny,
+    ggplot2,
+    pheatmap,
     AnnotationDbi,
     org.Hs.eg.db,
 Suggests:

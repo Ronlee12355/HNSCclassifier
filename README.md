@@ -55,7 +55,7 @@ BiocManager::install(c("GSVA", "org.Hs.eg.db", "AnnotationDbi"))
 ### Step 2: Install optional dependencies (for the Shiny app)
 
 ```r
-BiocManager::install(c("shiny", "DT", "shinythemes", "shinyjs"))
+BiocManager::install(c("shiny", "DT", "shinythemes", "shinyjs","pheatmap"))
 ```
 
 ### Step 3: Install HNSCclassifier
