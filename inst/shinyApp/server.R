@@ -1,7 +1,5 @@
 library(shiny)
 options(shiny.maxRequestSize = 50 * 1024^2)
-classify <- HNSCclassifier::classifyHNSC
-
 server <- function(input, output, session) {
 
   # 用 reactiveValues 存储数据矩阵和校验状态
@@ -111,7 +109,7 @@ server <- function(input, output, session) {
 
     Sys.sleep(1.0)
     tryCatch({
-      res <- classify(
+      res <- HNSCclassifier::classifyHNSC(
         input_expr = data.inputs$mRNA,
         idType = input$idType,
         outputType = input$outputType
@@ -121,9 +119,20 @@ server <- function(input, output, session) {
         ## Probability matrix
         result_df <- as.data.frame(round(res, 3))
         result_df <- cbind(Sample = rownames(result_df), result_df)
+        output$result_plot <- renderPlot({
+          plot_subtype_probabilities(res)
+        })
       } else {
         ## Classification result
         result_df <- data.frame(Sample = names(res), Subtype = res)
+        p<-plot_subtype_heatmap(data.inputs$mRNA,
+                                subtype=res,
+                                idType=input$idType,
+                                silent=TRUE
+        )
+        output$result_plot <- renderPlot({
+          p
+        })
       }
 
       output$result_table <- DT::renderDataTable({
@@ -136,11 +145,12 @@ server <- function(input, output, session) {
             searching = TRUE,
             scrollX = TRUE,
             dom = "Bfrtip",
-            pageLength = 30,
+            pageLength = 15,
             buttons = c("copy", "csv", "excel")
           )
         )
       })
+      shinyjs::show('result_panel')
 
       removeModal()
     },

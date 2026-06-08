@@ -19,6 +19,7 @@ plot_subtype_heatmap(
   mid_color = "white",
   high_color = "#d7191c",
   n_color = 100,
+  silent = FALSE,
   ...
 )
 }
@@ -73,13 +74,18 @@ zero.  Defaults are \code{"#2c7bb6"} (blue), \code{"white"}, and
 \item{n_color}{Number of colour levels to generate in the gradient
 (default 100).  Only used when \code{color = NULL}.}
 
+\item{silent}{Logical.  If \code{FALSE} (default), the heatmap is drawn
+directly to the current graphics device.  If \code{TRUE}, the heatmap
+is built but not drawn, returning a gtable object for manual drawing
+with \code{grid::grid.draw()}.}
+
 \item{...}{Additional arguments passed to \code{\link[pheatmap]{pheatmap}}.
 Note that \code{color} is set internally and should not be passed via
 \code{...}.}
 }
 \value{
-A \code{pheatmap} object (invisibly).  The heatmap is drawn as a
-side effect.
+A \code{pheatmap} object (invisibly).  The heatmap is drawn
+as a side effect.
 }
 \description{
 Draws a heatmap of curated subtype‑driver genes using the output of

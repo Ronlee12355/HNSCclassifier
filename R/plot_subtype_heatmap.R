@@ -42,12 +42,16 @@
 #'   \code{"#d7191c"} (red), respectively.
 #' @param n_color Number of colour levels to generate in the gradient
 #'   (default 100).  Only used when \code{color = NULL}.
+#' @param silent Logical.  If \code{FALSE} (default), the heatmap is drawn
+#'   directly to the current graphics device.  If \code{TRUE}, the heatmap
+#'   is built but not drawn, returning a gtable object for manual drawing
+#'   with \code{grid::grid.draw()}.
 #' @param ... Additional arguments passed to \code{\link[pheatmap]{pheatmap}}.
 #'   Note that \code{color} is set internally and should not be passed via
 #'   \code{...}.
 #'
-#' @return A \code{pheatmap} object (invisibly).  The heatmap is drawn as a
-#'   side effect.
+#' @return A \code{pheatmap} object (invisibly).  The heatmap is drawn
+#'   as a side effect.
 #'
 #' @note The \pkg{pheatmap} package must be installed.
 #'
@@ -82,6 +86,7 @@ plot_subtype_heatmap <- function(expr,
                                  mid_color = "white",
                                  high_color = "#d7191c",
                                  n_color = 100,
+                                 silent = FALSE,
                                  ...) {
   # ---------- 1. Check pheatmap availability ----------
   if (!requireNamespace("pheatmap", quietly = TRUE)) {
@@ -176,15 +181,16 @@ plot_subtype_heatmap <- function(expr,
   }
 
   # ---------- 8. Draw heatmap ----------
-  pheatmap(
+  pheatmap::pheatmap(
     tmp,
     annotation_col = anno,
-    show_colnames = FALSE,
-    show_rownames = show_rownames,
-    cluster_rows = cluster_rows,
-    cluster_cols = cluster_cols,
-    main = main,
-    color = color,
+    show_colnames   = FALSE,
+    show_rownames   = show_rownames,
+    cluster_rows    = cluster_rows,
+    cluster_cols    = cluster_cols,
+    main            = main,
+    color           = color,
+    silent          = silent,
     ...
   )
 }

@@ -148,6 +148,63 @@ res <- classifyHNSC(TCGA_LUSC_ENSEMBL, idType = "ENSEMBL")
 table(res)
 ```
 
+## Extracting pathway-level enrichment scores
+
+For advanced users who wish to perform their own downstream analyses
+(e.g. pathway-level differential expression, clustering, or custom
+machine learning), the `pathway_scores()` function exposes the internal
+ssGSEA enrichment scores that the random forest classifier uses as
+features. It runs the same preprocessing pipeline as `classifyHNSC()`
+— input validation, gene ID conversion, log2 transformation, and ssGSEA
+scoring — but returns the pathway × sample enrichment matrix instead of
+predicted subtypes.
+
+```{r, message = FALSE}
+pw <- pathway_scores(TCGA_LUSC)
+dim(pw)
+head(pw[, 1:5])
+```
+
+The returned matrix can be used with standard bioinformatics tools such
+as `limma` for differential pathway analysis, `ConsensusClusterPlus` for
+unsupervised clustering, or `pheatmap` for visualisation.
+
+## Visualising posterior subtype probabilities
+
+The `plot_subtype_probabilities()` function creates a stacked bar chart
+showing the posterior probability of each subtype for every sample.
+Samples are grouped by predicted subtype and ordered by confidence
+within each group. Samples whose maximum probability falls below a
+user-defined threshold (default 0.5) are flagged with a red asterisk,
+helping identify borderline cases that may warrant closer inspection.
+
+```{r, fig.width = 6, fig.height = 4, out.width = "100%", message = FALSE}
+probs <- classifyHNSC(TCGA_LUSC, outputType = "prob")
+plot_subtype_probabilities(probs)
+```
+
+To adjust the low-confidence threshold:
+
+```{r, fig.width = 6, fig.height = 4, out.width = "100%", message = FALSE}
+plot_subtype_probabilities(probs, threshold = 0.7)
+```
+
+## Visualising subtype-specific gene expression
+
+The `plot_subtype_heatmap()` function generates a heatmap of curated
+subtype-driver genes, with samples annotated by their predicted
+molecular subtype. It uses the built-in `subtype_genes` set, and the
+expression values are row-wise z-score scaled for comparability.
+
+```{r, fig.width = 8, fig.height = 8, out.width = "100%", message = FALSE}
+subtypes <- classifyHNSC(TCGA_LUSC, outputType = "class")
+plot_subtype_heatmap(TCGA_LUSC, subtypes)
+```
+
+A custom gene set can be supplied via the `gene_set` argument, and
+clustering behaviour can be controlled with `cluster_rows` and
+`cluster_cols`.
+
 ## Launching the Shiny interface
 
 For users who prefer a graphical, point-and-click experience over

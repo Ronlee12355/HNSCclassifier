@@ -18,6 +18,7 @@ Depends:
 URL: https://github.com/Ronlee12355/HNSCclassifier
 BugReports: https://github.com/Ronlee12355/HNSCclassifier/issues
 LazyData: true
+LazyDataCompression: xz
 Imports:
     GSVA,
     randomForest,
