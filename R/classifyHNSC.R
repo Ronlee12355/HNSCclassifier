@@ -95,7 +95,8 @@ classifyHNSC <- function (input_expr = NULL,
                           outputType = c("class", "prob")) {
   ## ====== 1. Input checking ====== ##
   outputType <- match.arg(outputType, c("class", "prob"))
-  idType <- match.arg(idType, c("SYMBOL", "ENSEMBL", "ENTREZID", "REFSEQ"))
+  idType <- match.arg(idType, c("SYMBOL", "ENSEMBL",
+                                "ENTREZID", "REFSEQ"))
   if (check_missing_values(input_expr)) {
     stop("Input expression matrix contains missing values.")
   }
@@ -154,8 +155,10 @@ classifyHNSC <- function (input_expr = NULL,
   }
 
   ## ====== 3. GSVA computation ====== ##
-  input_expr_gsva <- GSVA::gsva(GSVA::ssgseaParam(exprData = as.matrix(input_expr), geneSets = required.sets),
-                                verbose = FALSE)
+  input_expr_gsva <- GSVA::gsva(
+    GSVA::ssgseaParam(exprData = as.matrix(input_expr),
+                      geneSets = required.sets),
+    verbose = FALSE)
 
   ## ====== 4. Classification ====== ##
   res <- predict(finalModel,

@@ -28,7 +28,10 @@
 #' classifyHNSC_interface()
 #' }
 classifyHNSC_interface <-  function() {
-  required_pkgs <- c("DT", "shinythemes", "shinyjs", 'shiny')
+  required_pkgs <- c("DT",
+                     "shinythemes",
+                     "shinyjs",
+                     'shiny')
   missing <- required_pkgs[!vapply(required_pkgs,
                                    requireNamespace,
                                    quietly = TRUE,
@@ -40,11 +43,13 @@ classifyHNSC_interface <-  function() {
       paste(missing, collapse = ", ")
     )
   }
-  appDir <- system.file('shinyApp', package = 'HNSCclassifier')
+  appDir <- system.file('shinyApp',
+                        package = 'HNSCclassifier')
 
   if (appDir == '') {
     stop(
-      'Could not load shiny directory. Try re-install HNSCclassifier package.'
+      'Could not load shiny directory.
+      Try re-install HNSCclassifier package.'
     )
   }
 

@@ -96,9 +96,11 @@ plot_subtype_probabilities <- function(probs,
   }
 
   # ---- build plot -----------------------------------------------------------
-  p <- ggplot(long, aes(x = .data$Sample, y = .data$Prob,
+  p <- ggplot(long, aes(x = .data$Sample,
+                        y = .data$Prob,
                         fill = .data$Subtype)) +
-    geom_col(width = 1, colour = NA) +
+    geom_col(width = 1,
+             colour = NA) +
     scale_fill_manual(values = palette) +
     scale_y_continuous(expand = expansion(mult = c(0, 0.08))) +
     labs(x = NULL, y = "Posterior Probability",

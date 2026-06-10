@@ -81,10 +81,16 @@ plot_confusion_matrix <- function(cm,
   tbl$Reference  <- factor(tbl$Reference,  levels = colnames(cm$table))
 
   # Create the heatmap visualization
-  ggplot(tbl, aes(x = .data$Reference, y = .data$Prediction, fill = .data$Count)) +
+  ggplot(tbl, aes(x = .data$Reference,
+                  y = .data$Prediction,
+                  fill = .data$Count)) +
     geom_tile(color = "grey80", linewidth = 0.5) +
-    geom_text(aes(label = .data$Count), color = text_color, size = text_size) +
-    scale_fill_gradient(low = low_color, high = high_color, name = "Count") +
+    geom_text(aes(label = .data$Count),
+              color = text_color,
+              size = text_size) +
+    scale_fill_gradient(low = low_color,
+                        high = high_color,
+                        name = "Count") +
     coord_fixed() +
     theme_minimal(base_size = 12) +
     theme(
@@ -92,5 +98,7 @@ plot_confusion_matrix <- function(cm,
       axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
       plot.title = element_text(hjust = 0.5, face = "bold")
     ) +
-    labs(title = title, x = xlab, y = ylab)
+    labs(title = title,
+         x = xlab,
+         y = ylab)
 }
