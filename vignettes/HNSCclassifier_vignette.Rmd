@@ -3,7 +3,7 @@ title: "HNSCclassifier: An R Package to Predict Molecular Subtypes of Head and N
 author: "Jiang Li"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-keywords: "HNSCC, classification, TCGA, ssGSEA, R package"
+keywords: "HNSC, classification, TCGA, ssGSEA, R package"
 vignette: >
   %\VignetteIndexEntry{HNSCclassifier Introduction}
   %\VignetteEncoding{UTF-8}
@@ -22,12 +22,12 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-Head and Neck Squamous Cell Carcinoma (HNSCC) is a molecularly
+Head and Neck Squamous Cell Carcinoma (HNSC) is a molecularly
 heterogeneous disease, and its classification into distinct subtypes —
 **Atypical**, **Basal**, **Classical**, and **Mesenchymal** — has
 important implications for prognosis and therapeutic strategy. The
 `HNSCclassifier` package provides a ready-to-use tool for assigning
-HNSCC samples to these TCGA-established molecular subtypes. The
+HNSC samples to these TCGA-established molecular subtypes. The
 classifier employs a **pathway-level normalization strategy** that first
 converts gene expression profiles into pathway enrichment scores via
 single-sample Gene Set Enrichment Analysis (ssGSEA), then applies a
@@ -35,7 +35,7 @@ pre-trained random forest model for final subtype prediction. This
 design minimises cross-platform technical variation, making the
 classifier applicable to both RNA-seq and microarray data.
 
-## Molecular Subtypes of HNSCC
+## Molecular Subtypes of HNSC
 
 Head and Neck Squamous Cell Carcinoma is a heterogeneous disease with distinct molecular subtypes that differ in their biology, clinical outcomes, and therapeutic responses. The four subtypes, originally characterised by The Cancer Genome Atlas (TCGA) and Walter et al., are:
 
@@ -204,6 +204,121 @@ plot_subtype_heatmap(TCGA_LUSC, subtypes)
 A custom gene set can be supplied via the `gene_set` argument, and
 clustering behaviour can be controlled with `cluster_rows` and
 `cluster_cols`.
+
+## Working with full TCGA-LUSC data
+
+The built-in `TCGA_LUSC` dataset is a convenience subset of 50 samples
+for quick testing.  For real analyses, you can download the full
+TCGA-LUSC expression cohort and reproduce the complete classification
+workflow.  This section walks through each step — from downloading raw
+data to comparing predictions against the original TCGA consensus
+annotations.
+
+### Downloading expression data
+
+The TCGA-LUSC gene expression matrix (STAR-aligned, log2(TPM+1)
+transformed) is hosted on the [UCSC Xena data
+browser](https://xenabrowser.net/datapages/).  Download the file
+`TCGA-LUSC.star_tpm.tsv.gz`:
+
+```{bash, eval = FALSE}
+wget https://gdc-hub.s3.us-east-1.amazonaws.com/download/TCGA-LUSC.star_tpm.tsv.gz
+gunzip TCGA-LUSC.star_tpm.tsv.gz
+```
+
+### Downloading TCGA subtype annotations
+
+The TCGA molecular subtype calls are available via
+**TCGAbiolinks**.  Install it if needed:
+
+```{r, eval = FALSE}
+BiocManager::install("TCGAbiolinks")
+```
+
+### Full pipeline: from raw data to predicted subtypes
+
+The following code reads the expression TSV, strips Ensembl version
+suffixes, converts Ensembl IDs to gene symbols, retains primary tumour
+samples only, filters zero-variance genes, and runs `classifyHNSC()`.
+It also fetches the TCGA reference annotation for downstream comparison.
+
+```{r, eval = FALSE}
+library(data.table)
+library(org.Hs.eg.db)
+library(dplyr)
+library(tibble)
+library(stringr)
+library(TCGAbiolinks)
+library(HNSCclassifier)
+
+# ---- 1. Read expression data ----
+lusc.expr <- data.table::fread(
+  "TCGA-LUSC.star_tpm.tsv",
+  data.table = FALSE
+)
+
+# Strip Ensembl version suffix (e.g. ENSG00000141510.11 → ENSG00000141510)
+lusc.expr$Ensembl_ID <- sapply(
+  lusc.expr$Ensembl_ID,
+  function(x) unlist(strsplit(x, "\\."))[1]
+)
+
+# Convert Ensembl ID → gene symbol
+lusc.expr$symbol <- AnnotationDbi::mapIds(
+  org.Hs.eg.db,
+  keys      = lusc.expr$Ensembl_ID,
+  keytype   = "ENSEMBL",
+  column    = "SYMBOL"
+)
+
+lusc.expr$Ensembl_ID <- NULL
+lusc.expr <- lusc.expr %>%
+  dplyr::filter(!is.na(symbol)) %>%
+  dplyr::group_by(symbol) %>%
+  dplyr::summarise_all(max) %>%
+  dplyr::ungroup() %>%
+  as.data.frame() %>%
+  tibble::column_to_rownames("symbol")
+
+# Keep primary tumour samples only (barcodes ending with "-01A")
+lusc.expr <- lusc.expr[, grepl("01A$", colnames(lusc.expr))]
+
+# ---- 2. TCGA subtype annotation ----
+lusc.subtype <- TCGAbiolinks::TCGAquery_subtype(tumor = "LUSC")
+lusc.subtype$sample <- paste0(lusc.subtype$patient, "-01A")
+lusc.subtype <- lusc.subtype[
+  lusc.subtype$sample %in% colnames(lusc.expr),
+]
+lusc.expr <- lusc.expr[, lusc.subtype$sample]
+
+# Harmonise subtype labels to title case
+lusc.subtype$Expression.Subtype <- stringr::str_to_title(
+  lusc.subtype$Expression.Subtype
+)
+
+# Remove zero-variance genes
+lusc.expr <- lusc.expr[apply(lusc.expr, 1, mad) > 0, ]
+
+# ---- 3. Run HNSCclassifier ----
+lusc_pred <- classifyHNSC(lusc.expr, outputType = "class")
+table(lusc_pred)
+```
+
+### Comparing with TCGA consensus annotations
+
+The TCGA project assigned HNSC subtypes by integrating mRNA, miRNA,
+methylation, and copy-number data via consensus clustering.  The
+`HNSCclassifier` uses only transcriptomic data, so perfect agreement
+is not expected; nevertheless, a cross-tabulation gives a useful sense
+of concordance:
+
+```{r, eval = FALSE}
+comp <- data.frame(
+  TCGA   = lusc.subtype$Expression.Subtype,
+  HNSCcl = lusc_pred[lusc.subtype$sample]
+)
+table(comp)
+```
 
 ## Launching the Shiny interface
 

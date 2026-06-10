@@ -8,12 +8,12 @@
 <img src="https://github.com/Ronlee12355/HNSCclassifier/blob/main/HNSCclassifier.png" height="150" align="right"/>
 <!-- badges: end -->
 
-An R package for robust molecular subtype classification of **Head and Neck Squamous Cell Carcinoma (HNSCC)**. This classifier assigns tumour samples to one of four TCGA-defined molecular subtypes — **Atypical**, **Basal**, **Classical**, and **Mesenchymal** — using a pre-trained random forest model coupled with pathway-level normalisation via single-sample gene set enrichment analysis (ssGSEA).
+An R package for robust molecular subtype classification of **Head and Neck Squamous Cell Carcinoma (HNSC)**. This classifier assigns tumour samples to one of four TCGA-defined molecular subtypes — **Atypical**, **Basal**, **Classical**, and **Mesenchymal** — using a pre-trained random forest model coupled with pathway-level normalisation via single-sample gene set enrichment analysis (ssGSEA).
 
 
 ## Table of Contents
 
-- [Molecular Subtypes of HNSCC](#molecular-subtypes-of-hnscc)
+- [Molecular Subtypes of HNSC](#molecular-subtypes-of-hnscc)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Features](#features)
@@ -24,7 +24,7 @@ An R package for robust molecular subtype classification of **Head and Neck Squa
 
 ---
 
-## Molecular Subtypes of HNSCC
+## Molecular Subtypes of HNSC
 
 Head and Neck Squamous Cell Carcinoma is a heterogeneous disease with distinct molecular subtypes that differ in their biology, clinical outcomes, and therapeutic responses. The four subtypes, originally characterised by The Cancer Genome Atlas (TCGA) and Walter et al., are:
 
@@ -193,7 +193,7 @@ The package includes two example datasets derived from the **TCGA Lung Squamous 
 | `TCGA_LUSC` | 22,962 genes (SYMBOL) | 50 tumour samples | Gene expression matrix in log2(TPM + 1) scale, with official gene symbols as row names |
 | `TCGA_LUSC_ENSEMBL` | 22,962 genes (ENSEMBL) | 50 tumour samples | Same expression values as `TCGA_LUSC`, but row names are converted to Ensembl gene IDs (e.g., ENSG00000141510) |
 
-> **Note:** These datasets are provided for demonstration and testing purposes. Users should apply the classifier to their own HNSCC gene expression data for research applications. The dataset names use "LUSC" (Lung Squamous Cell Carcinoma) because the data were originally sourced from that project, but the classifier was designed and validated for HNSCC samples.
+> **Note:** These datasets are provided for demonstration and testing purposes. Users should apply the classifier to their own HNSC gene expression data for research applications. The dataset names use "LUSC" (Lung Squamous Cell Carcinoma) because the data were originally sourced from that project, but the classifier was designed and validated for HNSC samples.
 
 ---
 
