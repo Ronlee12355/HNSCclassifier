@@ -60,10 +60,19 @@ BiocManager::install(c("shiny", "DT", "shinythemes", "shinyjs","pheatmap"))
 
 ### Step 3: Install HNSCclassifier
 
+By default, `build_vignettes = FALSE` is recommended — the vignette code downloads external data and may fail in offline environments. Set `build_vignettes = TRUE` if you prefer to browse the vignette locally.
+
 ```r
 if (!requireNamespace("remotes", quietly = TRUE))
     install.packages("remotes")
-remotes::install_github("Ronlee12355/HNSCclassifier")
+
+# Fast installation (skip vignette building)
+remotes::install_github("Ronlee12355/HNSCclassifier",
+                        build_vignettes = FALSE)
+
+# Or build vignettes locally (requires knitr, rmarkdown)
+remotes::install_github("Ronlee12355/HNSCclassifier",
+                        build_vignettes = TRUE)
 ```
 
 ### Step 4: Load the package
