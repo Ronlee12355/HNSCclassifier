@@ -30,9 +30,10 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    testthat,
+    testthat (>= 3.0.0),
     DT,
     shinythemes,
     shinyjs
 VignetteBuilder: knitr
 License: GPL (>= 3)
+Config/testthat/edition: 3

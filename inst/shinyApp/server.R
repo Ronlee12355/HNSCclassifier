@@ -1,7 +1,6 @@
 library(shiny)
 options(shiny.maxRequestSize = 50 * 1024^2)
 server <- function(input, output, session) {
-
   # 用 reactiveValues 存储数据矩阵和校验状态
   data.inputs <- reactiveValues(mRNA = NULL, message = F)
   # 动态控制提交按钮状态
@@ -16,14 +15,19 @@ server <- function(input, output, session) {
   # 文件上传处理
   observeEvent(input$Expr, {
     req(input$Expr$datapath)
-    df <- read.csv(input$Expr$datapath, check.names = FALSE, sep = input$sep)
+    df <- read.csv(input$Expr$datapath,
+                   check.names = FALSE,
+                   sep = input$sep)
 
     # 检查第一列是否为 Gene_ID
     if (!("Gene_ID" %in% colnames(df))) {
       data.inputs$message <- FALSE
       output$mRNA_msg <- renderUI({
-        p(icon("window-close"), "Column names must include 'Gene_ID' to identify gene IDs.",
-          style = "color:red;")
+        p(
+          icon("window-close"),
+          "Column names must include 'Gene_ID' to identify gene IDs.",
+          style = "color:red;"
+        )
       })
       return()
     }
@@ -32,48 +36,64 @@ server <- function(input, output, session) {
     if (any(duplicated(df$Gene_ID)) || any(df$Gene_ID == "")) {
       data.inputs$message <- FALSE
       output$mRNA_msg <- renderUI({
-        p(icon("window-close"), "Duplicate or empty Gene_ID values are not allowed.",
-          style = "color:red;")
+        p(
+          icon("window-close"),
+          "Duplicate or empty Gene_ID values are not allowed.",
+          style = "color:red;"
+        )
       })
       return()
     }
 
     # 读入数值矩阵
-    mat <- as.matrix(read.csv(input$Expr$datapath,
-                              check.names = FALSE,
-                              row.names = "Gene_ID",
-                              sep = input$sep))
+    mat <- as.matrix(
+      read.csv(
+        input$Expr$datapath,
+        check.names = FALSE,
+        row.names = "Gene_ID",
+        sep = input$sep
+      )
+    )
 
     # 校验数值
     if (any(is.na(mat))) {
       data.inputs$message <- FALSE
       output$mRNA_msg <- renderUI({
-        p(icon("window-close"), "Gene expression profile cannot contain any NA value(s).",
-          style = "color:red;")
+        p(
+          icon("window-close"),
+          "Gene expression profile cannot contain any NA value(s).",
+          style = "color:red;"
+        )
       })
       return()
     }
     if (any(mat < 0, na.rm = TRUE)) {
       data.inputs$message <- FALSE
       output$mRNA_msg <- renderUI({
-        p(icon("window-close"), "Gene expression profile cannot contain any negative value(s).",
-          style = "color:red;")
+        p(
+          icon("window-close"),
+          "Gene expression profile cannot contain any negative value(s).",
+          style = "color:red;"
+        )
       })
       return()
     }
     if (any(colnames(mat) %in% c("SYMBOL", "ENSEMBL", "ENTREZID", "REFSEQ"))) {
       data.inputs$message <- FALSE
       output$mRNA_msg <- renderUI({
-        p(icon("window-close"),
+        p(
+          icon("window-close"),
           "Sample names should not be 'SYMBOL', 'ENSEMBL', 'ENTREZID' or 'REFSEQ'.",
-          style = "color:red;")
+          style = "color:red;"
+        )
       })
       return()
     }
     if (ncol(mat) < 2) {
       data.inputs$message <- FALSE
       output$mRNA_msg <- renderUI({
-        p(icon("window-close"), "Sample size must be larger than one.",
+        p(icon("window-close"),
+          "Sample size must be larger than one.",
           style = "color:red;")
       })
       return()
@@ -95,17 +115,18 @@ server <- function(input, output, session) {
   # 分类提交
   observeEvent(input$submit, {
     # 显示处理进度弹窗
-    showModal(modalDialog(
-      tagList(
-        h3(
-          img(src = "Loading_icon.gif", height = "30%", width = "30%"),
-          "HNSCC molecular subtype prediction is processing...",
-           align = "center",
-           style = "color:black;")
-      ),
-      footer = NULL,
-      size = "l"
-    ))
+    showModal(modalDialog(tagList(
+      h3(
+        img(
+          src = "Loading_icon.gif",
+          height = "30%",
+          width = "30%"
+        ),
+        "HNSCC molecular subtype prediction is processing...",
+        align = "center",
+        style = "color:black;"
+      )
+    ), footer = NULL, size = "l"))
 
     Sys.sleep(1.0)
     tryCatch({
@@ -125,10 +146,11 @@ server <- function(input, output, session) {
       } else {
         ## Classification result
         result_df <- data.frame(Sample = names(res), Subtype = res)
-        p<-plot_subtype_heatmap(data.inputs$mRNA,
-                                subtype=res,
-                                idType=input$idType,
-                                silent=TRUE
+        p <- plot_subtype_heatmap(
+          data.inputs$mRNA,
+          subtype = res,
+          idType = input$idType,
+          silent = TRUE
         )
         output$result_plot <- renderPlot({
           p
@@ -153,14 +175,16 @@ server <- function(input, output, session) {
       shinyjs::show('result_panel')
 
       removeModal()
-    },
-    error = function(e) {
+    }, error = function(e) {
       removeModal()
       showModal(modalDialog(
         title = p(icon("exclamation"), strong("Error information")),
         tagList(
-          h3("An error occurred during classification. Please check your file and parameters.",
-             style = "color:red;", align = "center"),
+          h3(
+            "An error occurred during classification. Please check your file and parameters.",
+            style = "color:red;",
+            align = "center"
+          ),
           h4(as.character(e), align = "center")
         ),
         footer = NULL,

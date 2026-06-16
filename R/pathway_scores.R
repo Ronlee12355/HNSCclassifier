@@ -69,6 +69,9 @@ pathway_scores <- function(input_expr = NULL,
     stop("At least one sample is required.")
   }
 
+  # ---- Validate that the declared idType matches actual row names ----
+  validate_id_type(input_expr, idType)
+
   ## Remove zero-variance genes
   input_expr <- input_expr[apply(input_expr, 1, function(x)
     mad(x) > 0), ]

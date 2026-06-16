@@ -95,7 +95,10 @@ plot_subtype_heatmap <- function(expr,
 
   idType <- match.arg(idType)
 
-  # ---------- 2. Coerce subtype to a named character vector ----------
+  # ---- Validate that the declared idType matches actual row names ----
+  validate_id_type(expr, idType)
+
+
   # ---------- 2. Coerce subtype to a named character vector ----------
   if (is.atomic(subtype) && !is.null(names(subtype))) {
     # 接受命名向量（包括 factor），统一转为字符
