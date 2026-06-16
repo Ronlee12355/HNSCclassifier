@@ -9,6 +9,7 @@
     version,
     "
 Github page: https://github.com/Ronlee12355/HNSCclassifier
+Report bugs: https://github.com/Ronlee12355/HNSCclassifier/issues
 
 This message can be suppressed by:
   suppressPackageStartupMessages(library(HNSCclassifier))
