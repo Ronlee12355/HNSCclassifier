@@ -35,7 +35,7 @@ Head and Neck Squamous Cell Carcinoma is a heterogeneous disease with distinct m
 | **Classical** | Heavy smoking association; the most prevalent subtype; characterised by xenobiotic metabolism, KEAP1/NRF2 pathway alterations, and oxidative stress gene signatures |
 | **Mesenchymal** | Epithelial–mesenchymal transition (EMT) features; invasive/migratory phenotype; TGF-β signalling activation; poorest prognosis among the four subtypes |
 
-Subtype information can guide prognosis stratification and might inform treatment selection in the context of clinical trials and translational research.
+Subtype information can guide prognosis stratification and may inform treatment selection in the context of clinical trials and translational research.
 
 ---
 
