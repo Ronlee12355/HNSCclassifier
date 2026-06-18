@@ -11,9 +11,9 @@ Description: This package provides a robust classifier to assign head and neck s
 \section{Overview}{
 
 \strong{HNSCclassifier} provides a ready-to-use molecular subtyping
-framework for head and neck squamous cell carcinoma (HNSCC).  It
+framework for head and neck squamous cell carcinoma (HNSC).  It
 assigns tumour samples to one of four TCGA-defined subtypes —
-\strong{Atypical (HPV-driven)}, \strong{Basal}, \strong{Classical}, and
+\strong{Atypical}, \strong{Basal}, \strong{Classical}, and
 \strong{Mesenchymal} — using a pipeline designed for cross-platform
 portability.
 
