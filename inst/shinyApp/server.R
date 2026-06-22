@@ -141,12 +141,12 @@ server <- function(input, output, session) {
         result_df <- as.data.frame(round(res, 3))
         result_df <- cbind(Sample = rownames(result_df), result_df)
         output$result_plot <- renderPlot({
-          plot_subtype_probabilities(res)
+          HNSCclassifier::plot_subtype_probabilities(res)
         })
       } else {
         ## Classification result
         result_df <- data.frame(Sample = names(res), Subtype = res)
-        p <- plot_subtype_heatmap(
+        p <- HNSCclassifier::plot_subtype_heatmap(
           data.inputs$mRNA,
           subtype = res,
           idType = input$idType,
