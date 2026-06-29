@@ -315,7 +315,7 @@ of concordance:
 ```{r, eval = FALSE}
 comp <- data.frame(
   TCGA   = lusc.subtype$Expression.Subtype,
-  HNSCcl = lusc_pred[lusc.subtype$sample]
+  HNSCclass = lusc_pred[lusc.subtype$sample]
 )
 table(comp)
 ```
