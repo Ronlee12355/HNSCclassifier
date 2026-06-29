@@ -1,6 +1,7 @@
 library(shiny)
 options(shiny.maxRequestSize = 50 * 1024^2)
-server <- function(input, output, session) {
+
+shinyServer(function(input, output, session) {
   # 用 reactiveValues 存储数据矩阵和校验状态
   data.inputs <- reactiveValues(mRNA = NULL, message = F)
   # 动态控制提交按钮状态
@@ -194,3 +195,4 @@ server <- function(input, output, session) {
     })
   })
 }
+)

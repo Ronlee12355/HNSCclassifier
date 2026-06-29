@@ -3,7 +3,7 @@ library(DT)
 library(shinyjs)
 library(shinythemes)
 
-ui <- navbarPage(
+navbarPage(
   title = "HNSCclassifier",
   position = 'static-top',
   inverse = T,

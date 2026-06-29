@@ -157,13 +157,13 @@ classifyHNSC <- function (input_expr = NULL,
     input_expr <- log2(input_expr + 1)
   }
 
-  ## ====== 3. GSVA computation ====== ##
+  ## ====== 4. GSVA computation ====== ##
   input_expr_gsva <- GSVA::gsva(
     GSVA::ssgseaParam(exprData = as.matrix(input_expr),
                       geneSets = required.sets),
     verbose = FALSE)
 
-  ## ====== 4. Classification ====== ##
+  ## ====== 5. Classification ====== ##
   res <- predict(finalModel,
                  newdata = scale(t(input_expr_gsva)),
                  type = outputType)
