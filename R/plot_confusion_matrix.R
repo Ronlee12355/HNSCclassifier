@@ -95,7 +95,8 @@ plot_confusion_matrix <- function(cm,
               size = text_size) +
     scale_fill_gradient(low = low_color,
                         high = high_color,
-                        name = "Count") +
+                        name = "Count",
+                        limits = c(0, NA)) +
     coord_fixed() +
     theme_minimal(base_size = 12) +
     theme(
