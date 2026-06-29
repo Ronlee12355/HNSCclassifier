@@ -66,6 +66,11 @@ plot_confusion_matrix <- function(cm,
                                   text_color = "black",
                                   text_size = 5) {
 
+  # ---- Check caret availability ----
+  if (!requireNamespace("caret", quietly = TRUE)) {
+    stop("Package 'caret' is required. Install with: install.packages('caret')")
+  }
+
   # Validate input
   if (!inherits(cm, "confusionMatrix")) {
     stop("'cm' must be a confusionMatrix object from the caret package")
