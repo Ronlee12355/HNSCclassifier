@@ -28,6 +28,7 @@ Imports:
     AnnotationDbi,
     org.Hs.eg.db,
 Suggests:
+    caret,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),

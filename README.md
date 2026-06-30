@@ -41,24 +41,36 @@ Subtype information can guide prognosis stratification and may inform treatment 
 
 ## Installation
 
-The package depends on several Bioconductor packages. Install them first, then install `HNSCclassifier` from GitHub.
+The package depends on several CRAN and Bioconductor packages. Install them first, then install `HNSCclassifier` from GitHub.
 
-### Step 1: Install Bioconductor dependencies
+### Step 1: Install Bioconductor manager (if not already installed)
 
 ```r
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
+```
 
+### Step 2: Install CRAN dependencies (required)
+
+```r
+install.packages(c("randomForest", "ggplot2", "pheatmap"))
+```
+
+### Step 3: Install Bioconductor dependencies (required)
+
+```r
 BiocManager::install(c("GSVA", "org.Hs.eg.db", "AnnotationDbi"))
 ```
 
-### Step 2: Install optional dependencies (for the Shiny app)
+### Step 4: Install optional dependencies
+
+These packages are needed for the Shiny web interface and extended functionality (confusion matrix plotting, vignette building):
 
 ```r
-BiocManager::install(c("shiny", "DT", "shinythemes", "shinyjs","pheatmap"))
+install.packages(c("shiny", "DT", "shinythemes", "shinyjs", "caret", "knitr", "rmarkdown"))
 ```
 
-### Step 3: Install HNSCclassifier
+### Step 5: Install HNSCclassifier
 
 By default, `build_vignettes = FALSE` is recommended — the vignette code downloads external data and may fail in offline environments. Set `build_vignettes = TRUE` if you prefer to browse the vignette locally.
 
