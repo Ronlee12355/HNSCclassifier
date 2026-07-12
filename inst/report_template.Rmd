@@ -1,0 +1,150 @@
+---
+title: "HNSC Molecular Subtype Classification Report"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+params:
+  n_total: NA
+  summary_table: NA
+  sample_table: NA
+  probs: NULL
+  degs: NULL
+  expr: NULL
+  subtype: NA
+  idType: "SYMBOL"
+  has_probs: FALSE
+  has_heatmap: FALSE
+  has_degs: FALSE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+if (!requireNamespace("HNSCclassifier", quietly = TRUE)) {
+  stop(
+    "HNSCclassifier namespace is not available. ",
+    "Install the package (remotes::install_github(...)) ",
+    "or run devtools::load_all() during development."
+  )
+}
+
+library(ggplot2)
+library(DT)
+```
+
+---
+
+## 1. Classification Summary
+
+```{r summary-table}
+cat("\nTotal samples classified:", params$n_total, "\n\n")
+DT::datatable(
+  params$summary_table,
+  rownames = FALSE,
+  options = list(dom = "t", paging = FALSE, ordering = FALSE),
+  caption = "Molecular subtype distribution across all samples"
+)
+```
+
+---
+
+## 2. Subtype Distribution
+
+```{r dist-plot, fig.width=8, fig.height=4}
+subtype_colors <- c(
+  Atypical    = "#87C304",
+  Basal       = "#FC7C75",
+  Classical   = "#1AD3D8",
+  Mesenchymal = "#D880FF"
+)
+tbl <- params$summary_table
+tbl$Subtype <- factor(tbl$Subtype,
+                      levels = c("Atypical", "Basal", "Classical", "Mesenchymal"))
+ggplot(tbl, aes(x = Subtype, y = N, fill = Subtype)) +
+  geom_col(width = 0.6, colour = NA) +
+  geom_text(aes(label = paste0(N, " (", Pct, "%)")), vjust = -0.3, size = 4) +
+  scale_fill_manual(values = subtype_colors, guide = "none") +
+  labs(x = NULL, y = "Number of Samples") +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid.major.x = element_blank())
+```
+
+---
+
+## 3. Posterior Probabilities
+
+```{r probs-plot, fig.width=10, fig.height=max(5, params$n_total*0.12)}
+if (params$has_probs) {
+  HNSCclassifier::plot_subtype_probabilities(params$probs)
+} else {
+  cat("*(Probability matrix not provided; only class labels were available.)*")
+}
+```
+
+---
+
+## 4. Subtype Marker Gene Heatmap
+
+```{r heatmap, fig.width=10, fig.height=6}
+if (params$has_heatmap) {
+  HNSCclassifier::plot_subtype_heatmap(
+    params$expr, params$subtype,
+    idType = params$idType
+  )
+} else {
+  cat("*(Heatmap skipped — expression matrix not provided.)*")
+}
+```
+
+---
+
+## 5. Differentially Expressed Genes
+
+```{r degs, results='asis'}
+if (params$has_degs) {
+  for (nm in names(params$degs)) {
+    cat("\n\n###", nm, "\n\n")
+    df <- params$degs[[nm]]
+    if (nrow(df) == 0) {
+      cat("*(No genes passed the thresholds.)*\n\n")
+    } else {
+      df_sub <- head(df, 20)
+      df_show <- df_sub
+      colnames(df_show) <- c("Gene", "log2FC", "Mean (in)", "Mean (other)",
+                             "p-value", "Adj. p-value")
+      cat(
+        knitr::kable(df_show,
+                     format = "html",
+                     align = "lrrrrr",
+                     digits = c(NA, 2, 2, 2, 4, 4),
+                     caption = paste0("Top ", min(20, nrow(df)),
+                                      " DEGs for ", nm, " (one-vs-rest)"),
+                     table.attr = 'class="table table-striped table-hover"'),
+        "\n\n"
+      )
+    }
+  }
+} else {
+  cat("*(Differential expression results not provided.)*")
+}
+```
+
+---
+
+## 6. Sample-Level Classification
+
+```{r sample-table}
+DT::datatable(
+  params$sample_table,
+  rownames = FALSE,
+  options = list(pageLength = 15, searching = TRUE, scrollX = TRUE),
+  caption = "Per-sample classification results"
+)
+```
+
+---
+
