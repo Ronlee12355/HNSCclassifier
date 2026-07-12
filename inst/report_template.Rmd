@@ -26,9 +26,7 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 if (!requireNamespace("HNSCclassifier", quietly = TRUE)) {
   stop(
-    "HNSCclassifier namespace is not available. ",
-    "Install the package (remotes::install_github(...)) ",
-    "or run devtools::load_all() during development."
+    "HNSCclassifier namespace is not available. "
   )
 }
 
