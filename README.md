@@ -141,8 +141,10 @@ classifyHNSC_interface()
 - **Automatic preprocessing**: input validation, log2 transformation detection and application, and gene-level noise reduction (zero-variance gene filtering) are handled internally.
 - **Curated pathway gene sets**: built with a carefully selected collection of pathway gene sets (`required.sets`) for ssGSEA, bridging any input dataset to the model's training feature space.
 - **Pre-trained random forest model**: ships with a fully trained `randomForest` object (`finalModel`) — no need for users to train or tune any model.
+- **Classification summary**: [`summarize_subtype()`](#classification-summary) generates a concise summary table (counts, percentages, proportions) from classification results, plus an optional bar chart — a quick overview of subtype distribution in your cohort.
 - **Gene ID conversion**: [`convert_id()`](#gene-id-conversion) maps expression matrix row names between any combination of SYMBOL, ENSEMBL, ENTREZID, and REFSEQ. Supports max/mean/median aggregation for many-to-one mappings, automatic ENSEMBL version suffix stripping, and optional retention of unmapped genes.
 - **Subtype-specific differential expression**: [`extract_top_genes()`](#differential-expression-analysis) performs one-vs-rest differential expression analysis for each molecular subtype (Wilcoxon rank-sum test or Welch's t-test), returning genes that pass user-defined log2 fold-change and adjusted p-value thresholds — ideal for biomarker discovery.
+- **One-click report generation**: [`report_classification()`](#report-generation) compiles classification results, visualizations, and optional differential expression analysis into a self-contained HTML report — suitable as supplementary material for publications or clinical documentation.
 
 ---
 
