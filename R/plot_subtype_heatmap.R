@@ -138,11 +138,24 @@ plot_subtype_heatmap <- function(expr,
         columns = "SYMBOL"
       )
     )
-    map_vec <- mapping$SYMBOL[match(rownames(expr), mapping[[idType]])]
-    keep <- !is.na(map_vec)
-    expr <- expr[keep, , drop = FALSE]
-    rownames(expr) <- map_vec[keep]
-    message("Converted ", sum(keep), " rows from ", idType, " to SYMBOL.")
+    # Align SYMBOL to row order
+    idx <- match(rownames(expr), mapping[[idType]])
+    symbol_vec <- mapping$SYMBOL[idx]
+    keep <- !is.na(symbol_vec)
+    if (sum(keep) == 0) {
+      stop("No identifiers could be mapped to gene symbols.")
+    }
+    expr_sub <- expr[keep, , drop = FALSE]
+    sym_sub <- symbol_vec[keep]
+
+    # Aggregate by max per symbol (consistent with classifyHNSC)
+    agg <- stats::aggregate(as.data.frame(expr_sub),
+                            by = list(SYMBOL = sym_sub),
+                            FUN = max)
+    rownames(agg) <- agg$SYMBOL
+    agg$SYMBOL <- NULL
+    expr <- as.matrix(agg)
+    message("Converted ", nrow(expr), " rows from ", idType, " to SYMBOL.")
   }
 
   # ---------- 4. Prepare gene set ----------
