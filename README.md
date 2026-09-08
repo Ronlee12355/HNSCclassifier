@@ -1,4 +1,4 @@
-# HNSCclassifier: Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma
+# A pathway‑centric classification strategy for robust and platform‑independent molecular subtyping of head and neck squamous cell carcinoma
 
 <!-- badges: start -->
 <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" height="20"></a>

@@ -1,0 +1,31 @@
+url: https://Ronlee12355.github.io/HNSCclassifier/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [github]
+  components:
+    intro:
+      text: Introduction
+      href: articles/HNSCclassifier_vignette.html
+
+reference:
+- title: Classification
+  contents:
+  - classifyHNSC
+  - pathway_scores
+- title: Visualization
+  contents:
+  - plot_subtype_probabilities
+  - plot_subtype_heatmap
+  - plot_confusion_matrix
+- title: Utilities & Reporting
+  contents:
+  - convert_id
+  - extract_top_genes
+  - summarize_subtype
+  - report_classification
+  - classifyHNSC_interface

@@ -4,9 +4,9 @@
 \name{HNSCclassifier-package}
 \alias{HNSCclassifier}
 \alias{HNSCclassifier-package}
-\title{HNSCclassifier: HNSCclassifier: An R Package to Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma}
+\title{HNSCclassifier: A pathway‑centric classification strategy for robust and platform‑independent molecular subtyping of head and neck squamous cell carcinoma}
 \description{
-Description: This package provides a robust classifier to assign head and neck squamous cell carcinoma (HNSCC) samples to the established TCGA molecular subtypes (Atypical, Basal, Classical, Mesenchymal). It implements a pathway-level normalization strategy based on single-sample gene set enrichment (ssGSEA) and a pre-trained random forest model. The package includes a command-line function for batch prediction and an interactive Shiny web interface for users without programming experience.
+This package provides a robust classifier to assign head and neck squamous cell carcinoma (HNSCC) samples to the established TCGA molecular subtypes (Atypical, Basal, Classical, Mesenchymal). It implements a pathway-level normalization strategy based on single-sample gene set enrichment (ssGSEA) and a pre-trained random forest model. The package includes a command-line function for batch prediction and an interactive Shiny web interface for users without programming experience.
 }
 \section{Overview}{
 

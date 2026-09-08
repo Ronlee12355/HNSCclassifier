@@ -116,7 +116,10 @@ summarize_subtype <- function(subtype,
         size = 4
       ) +
       ggplot2::scale_fill_manual(values = subtype_colors, guide = "none") +
-      ggplot2::coord_flip() +
+      ggplot2::scale_y_continuous(
+        expand = ggplot2::expansion(mult = c(0.02, 0.15))
+      ) +
+      ggplot2::coord_flip(clip = "off") +
       ggplot2::labs(
         x = NULL,
         y = "Number of Samples",

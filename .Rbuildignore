@@ -3,3 +3,7 @@
 ^LICENSE\.md$
 ^HNSCclassifier\.png$
 ^\.claude$
+^_pkgdown\.yml$
+^\.github$
+^docs$
+^pkgdown$

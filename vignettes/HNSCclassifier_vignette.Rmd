@@ -1,7 +1,6 @@
 ---
-title: "HNSCclassifier: An R Package to Predict Molecular Subtypes of Head and Neck Squamous Cell Carcinoma"
+title: "A pathway‑centric classification strategy for robust and platform‑independent molecular subtyping of head and neck squamous cell carcinoma"
 author: "Jiang Li"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 keywords: "HNSC, classification, TCGA, ssGSEA, R package"
 vignette: >
@@ -16,7 +15,10 @@ editor_options:
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment  = "#>",
+  dpi      = 200,
+  fig.align = "center",
+  fig.path = "figure/"
 )
 ```
 
@@ -58,6 +60,11 @@ Subtype information can guide prognosis stratification and may inform treatment 
 - **Automatic preprocessing**: input validation, log2 transformation detection and application, and gene-level noise reduction (zero-variance gene filtering) are handled internally.
 - **Curated pathway gene sets**: built with a carefully selected collection of pathway gene sets (`required.sets`) for ssGSEA, bridging any input dataset to the model's training feature space.
 - **Pre-trained random forest model**: ships with a fully trained `randomForest` object (`finalModel`) — no need for users to train or tune any model.
+- **Classification summary**: `summarize_subtype()` quickly tabulates the subtype distribution (counts, percentages, proportions) from classification results.
+- **Gene ID conversion**: `convert_id()` maps expression row names between any combination of SYMBOL, ENSEMBL, ENTREZID, and REFSEQ, with configurable aggregation for many-to-one mappings.
+- **Subtype-specific differential expression**: `extract_top_genes()` runs one-vs-rest differential tests to reveal marker genes for each molecular subtype.
+- **Confusion-matrix visualisation**: `plot_confusion_matrix()` summarises classifier performance against reference labels.
+- **HTML report generation**: `report_classification()` compiles results and figures into a single self-contained HTML report.
 
 
 ## Installation
@@ -121,6 +128,25 @@ probs <- classifyHNSC(TCGA_LUSC, outputType = "prob")
 head(probs)
 ```
 
+## Summarising classification results
+
+Once samples have been assigned a subtype, the `summarize_subtype()`
+function provides a quick overview of the subtype distribution. It
+accepts the named character vector returned by
+`classifyHNSC(..., outputType = "class")` and returns a summary table
+with the number of samples, percentage, and proportion in each of the
+four subtypes. All four TCGA subtypes are always reported — even those
+with zero samples — so the output is consistent across cohorts. By
+default, a horizontal bar chart of the distribution is also drawn.
+
+```{r, message = FALSE, warning = FALSE, fig.width = 8, fig.height = 3.5, out.width = "100%"}
+# Summary table plus bar chart
+summarize_subtype(subtypes)
+
+# To return the table without drawing the plot, set plot = FALSE
+# tbl <- summarize_subtype(subtypes, plot = FALSE)
+```
+
 ## Handling different gene ID types
 
 Gene expression data from different bioinformatics pipelines often use
@@ -146,6 +172,32 @@ ready-to-use example with Ensembl identifiers.
 # For Ensembl IDs
 res <- classifyHNSC(TCGA_LUSC_ENSEMBL, idType = "ENSEMBL")
 table(res)
+```
+
+## Converting gene identifiers between systems
+
+The `convert_id()` function is a general-purpose utility for converting
+the row names of an expression matrix between any two supported
+identifier systems (SYMBOL, ENSEMBL, ENTREZID, REFSEQ). It is useful
+when aligning expression data from different sources before a joint
+analysis. Key options include:
+
+- `agg_fun` — how to combine values when several source IDs map to the
+  same target ID: `"max"` (default), `"mean"`, or `"median"`.
+- `drop_unmapped` — whether to remove genes that cannot be mapped
+  (`TRUE`, default) or keep them with their original row name (`FALSE`).
+- Ensembl version suffixes (e.g. `ENSG00000141510.11`) are stripped
+  automatically before lookup.
+
+```{r, message = FALSE}
+# ENSEMBL -> SYMBOL (the example matrix already uses Ensembl IDs)
+expr_sym <- convert_id(TCGA_LUSC_ENSEMBL, from = "ENSEMBL", to = "SYMBOL")
+head(rownames(expr_sym))
+
+# SYMBOL -> ENTREZID, aggregating duplicates by the mean
+expr_entrez <- convert_id(TCGA_LUSC, from = "SYMBOL", to = "ENTREZID",
+                          agg_fun = "mean")
+head(rownames(expr_entrez))
 ```
 
 ## Extracting pathway-level enrichment scores
@@ -178,14 +230,14 @@ within each group. Samples whose maximum probability falls below a
 user-defined threshold (default 0.5) are flagged with a red asterisk,
 helping identify borderline cases that may warrant closer inspection.
 
-```{r, fig.width = 6, fig.height = 4, out.width = "100%", message = FALSE}
+```{r, fig.width = 9, fig.height = 5, out.width = "100%", message = FALSE}
 probs <- classifyHNSC(TCGA_LUSC, outputType = "prob")
 plot_subtype_probabilities(probs)
 ```
 
 To adjust the low-confidence threshold:
 
-```{r, fig.width = 6, fig.height = 4, out.width = "100%", message = FALSE}
+```{r, fig.width = 9, fig.height = 5, out.width = "100%", message = FALSE}
 plot_subtype_probabilities(probs, threshold = 0.7)
 ```
 
@@ -196,7 +248,7 @@ subtype-driver genes, with samples annotated by their predicted
 molecular subtype. It uses the built-in `subtype_genes` set, and the
 expression values are row-wise z-score scaled for comparability.
 
-```{r, fig.width = 8, fig.height = 8, out.width = "100%", message = FALSE}
+```{r, fig.width = 10, fig.height = 9, out.width = "100%", message = FALSE}
 subtypes <- classifyHNSC(TCGA_LUSC, outputType = "class")
 plot_subtype_heatmap(TCGA_LUSC, subtypes)
 ```
@@ -204,6 +256,52 @@ plot_subtype_heatmap(TCGA_LUSC, subtypes)
 A custom gene set can be supplied via the `gene_set` argument, and
 clustering behaviour can be controlled with `cluster_rows` and
 `cluster_cols`.
+
+## Identifying subtype-specific differentially expressed genes
+
+To find genes that characterise a given molecular subtype,
+`extract_top_genes()` performs a **one-vs-rest** differential expression
+analysis: for each subtype, every gene is compared between the samples
+of that subtype and all remaining samples. The default test is the
+Wilcoxon rank-sum test, which makes no distributional assumptions; a
+Welch *t*-test can be selected instead with `method = "t.test"`.
+P-values are corrected across all genes with the Benjamini-Hochberg
+procedure.
+
+Genes are retained only if they pass a minimum absolute log2
+fold-change (`log2fc_cutoff`, default 1) **and** an adjusted p-value
+threshold (`p_cutoff`, default 0.05). The function returns a named list
+of data frames — one per subtype — sorted by decreasing absolute fold
+change, with columns `gene`, `log2FC`, `mean_expr`, `mean_other`,
+`p_value`, and `adj_p_value`.
+
+```{r, eval = TRUE, warning=FALSE, message = FALSE}
+# One-vs-rest differential analysis for each subtype
+degs <- extract_top_genes(TCGA_LUSC, subtypes)
+names(degs)
+
+# Top differentially expressed genes of the Mesenchymal subtype
+head(degs$Mesenchymal, 5)
+```
+
+## Evaluating agreement with reference labels
+
+When reference subtype labels are available (for example, the official
+TCGA consensus annotations of a dataset), `plot_confusion_matrix()`
+visualises how well the classifier predictions agree with the reference.
+It takes a `caret::confusionMatrix` object and draws an annotated
+heatmap of predicted versus reference labels.
+
+```{r, eval = FALSE}
+library(caret)
+
+cm <- confusionMatrix(
+  factor(lusc_pred[lusc.subtype$sample]),      # classifier predictions
+  factor(lusc.subtype$Expression.Subtype)      # TCGA reference labels
+)
+
+plot_confusion_matrix(cm, title = "HNSCclassifier vs TCGA subtypes")
+```
 
 ## Working with full TCGA-LUSC data
 
@@ -351,6 +449,30 @@ installed before launching:
 ```{r, eval = FALSE}
 classifyHNSC_interface()
 ```
+
+## Generating an HTML report
+
+The `report_classification()` function compiles the classification
+results — including the subtype summary, distribution bar chart,
+posterior-probability plot, marker-gene heatmap, per-sample table, and
+any differential-expression results — into a single self-contained HTML
+report. Sections are included only when the corresponding input is
+provided, so the function works equally well for a minimal run (class
+labels alone) or a full report.
+
+```{r, eval = FALSE}
+# Full report: expression matrix + class labels + probabilities
+report_classification(
+  expr    = TCGA_LUSC,
+  subtype = subtypes,
+  probs   = probs,
+  output_file = "HNSC_report.html"
+)
+```
+
+The generated HTML is self-contained (figures are embedded) and can be
+shared with collaborators or included as supplementary material for a
+publication.
 
 ## Session info
 
