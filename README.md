@@ -5,6 +5,7 @@
 <a href="https://www.r-project.org/"><img src="https://img.shields.io/badge/R-%E2%89%A5%204.3-brightgreen" height="20"></a>
 <a href="https://github.com/Ronlee12355/HNSCclassifier/releases"><img src="https://img.shields.io/github/v/release/Ronlee12355/HNSCclassifier" height="20"></a>
 <a href="https://www.bioconductor.org/"><img src="https://img.shields.io/badge/Bioconductor-GSVA%7Corg.Hs.eg.db-blue" height="20"></a>
+<a href="https://cv.ronleecww.cn/HNSCclassifier/"><img src="https://img.shields.io/badge/Docs-online-brightgreen.svg" height="20"></a>
 <img src="https://github.com/Ronlee12355/HNSCclassifier/blob/main/HNSCclassifier.png" height="150" align="right"/>
 <!-- badges: end -->
 
