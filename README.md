@@ -87,7 +87,7 @@ remotes::install_github("Ronlee12355/HNSCclassifier",
                         build_vignettes = TRUE)
 ```
 
-### Step 4: Load the package
+### Step 6: Load the package
 
 ```r
 library(HNSCclassifier)
