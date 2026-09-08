@@ -1,0 +1,27 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/HNSCclassifier_vignette.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/HNSCclassifier-package.html</loc></url>
+<url><loc>/reference/Log2ed.html</loc></url>
+<url><loc>/reference/TCGA_LUSC.html</loc></url>
+<url><loc>/reference/TCGA_LUSC_ENSEMBL.html</loc></url>
+<url><loc>/reference/check_missing_values.html</loc></url>
+<url><loc>/reference/classifyHNSC.html</loc></url>
+<url><loc>/reference/classifyHNSC_interface.html</loc></url>
+<url><loc>/reference/convert_id.html</loc></url>
+<url><loc>/reference/detect_id_type.html</loc></url>
+<url><loc>/reference/extract_top_genes.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/pathway_scores.html</loc></url>
+<url><loc>/reference/plot_confusion_matrix.html</loc></url>
+<url><loc>/reference/plot_subtype_heatmap.html</loc></url>
+<url><loc>/reference/plot_subtype_probabilities.html</loc></url>
+<url><loc>/reference/report_classification.html</loc></url>
+<url><loc>/reference/summarize_subtype.html</loc></url>
+<url><loc>/reference/validate_id_type.html</loc></url>
+</urlset>
+
