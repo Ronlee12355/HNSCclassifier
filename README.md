@@ -11,7 +11,7 @@
 
 An R package for robust molecular subtype classification of **Head and Neck Squamous Cell Carcinoma (HNSC)**. This classifier assigns tumour samples to one of four TCGA-defined molecular subtypes — **Atypical**, **Basal**, **Classical**, and **Mesenchymal** — using a pre-trained random forest model coupled with pathway-level normalisation via single-sample gene set enrichment analysis (ssGSEA).
 
-Online tutorial is available at: <https://cv.ronleecww.cn/HNSCclassifier/>
+Online tutorial is available at: <https://cv.ronleecww.cn/HNSCclassifier/articles/HNSCclassifier_vignette.html>
 
 
 ## Table of Contents
