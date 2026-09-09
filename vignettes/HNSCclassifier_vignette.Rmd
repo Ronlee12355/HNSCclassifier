@@ -91,7 +91,7 @@ GitHub:
 ```{r, eval = FALSE}
 if (!requireNamespace("devtools", quietly = TRUE))
     install.packages("devtools")
-devtools::install_github("Ronlee12355/HNSCclassifier")
+devtools::install_github("JLI-CBB/HNSCclassifier")
 ```
 
 ## Quick start

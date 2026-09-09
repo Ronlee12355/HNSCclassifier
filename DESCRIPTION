@@ -15,8 +15,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Depends: 
     R (>= 4.3)
-URL: https://Ronlee12355.github.io/HNSCclassifier/, https://github.com/Ronlee12355/HNSCclassifier
-BugReports: https://github.com/Ronlee12355/HNSCclassifier/issues
+URL: https://jli-cbb.github.io/HNSCclassifier, https://github.com/JLI-CBB/HNSCclassifier
+BugReports: https://github.com/JLI-CBB/HNSCclassifier/issues
 LazyData: true
 LazyDataCompression: xz
 Imports:

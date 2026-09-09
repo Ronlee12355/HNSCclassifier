@@ -79,9 +79,9 @@
 #'
 #' @seealso
 #' \itemize{
-#'   \item \url{https://github.com/Ronlee12355/HNSCclassifier}
+#'   \item \url{https://github.com/JLI-CBB/HNSCclassifier}
 #'   \item Report bugs at
-#'         \url{https://github.com/Ronlee12355/HNSCclassifier/issues}
+#'         \url{https://github.com/JLI-CBB/HNSCclassifier/issues}
 #' }
 #'
 #' @author

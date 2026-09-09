@@ -123,7 +123,7 @@ navbarPage(
     h1('More information'),
     p(
       "For bug reports or feature requests, please visit our",
-      a("GitHub repository", href = "https://github.com/Ronlee12355/HNSCclassifier/issues"),
+      a("GitHub repository", href = "https://github.com/JLI-CBB/HNSCclassifier/issues"),
       "."
     )
   ))

@@ -3,15 +3,15 @@
 <!-- badges: start -->
 <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" height="20"></a>
 <a href="https://www.r-project.org/"><img src="https://img.shields.io/badge/R-%E2%89%A5%204.3-brightgreen" height="20"></a>
-<a href="https://github.com/Ronlee12355/HNSCclassifier/releases"><img src="https://img.shields.io/github/v/release/Ronlee12355/HNSCclassifier" height="20"></a>
+<a href="https://github.com/JLI-CBB/HNSCclassifier/releases"><img src="https://img.shields.io/github/v/release/JLI-CBB/HNSCclassifier" height="20"></a>
 <a href="https://www.bioconductor.org/"><img src="https://img.shields.io/badge/Bioconductor-GSVA%7Corg.Hs.eg.db-blue" height="20"></a>
-<a href="https://cv.ronleecww.cn/HNSCclassifier/"><img src="https://img.shields.io/badge/Docs-online-brightgreen.svg" height="20"></a>
-<img src="https://github.com/Ronlee12355/HNSCclassifier/blob/main/HNSCclassifier.png" height="150" align="right"/>
+<a href="https://jli-cbb.github.io/HNSCclassifier/"><img src="https://img.shields.io/badge/Docs-online-brightgreen.svg" height="20"></a>
+<img src="https://github.com/JLI-CBB/HNSCclassifier/blob/main/HNSCclassifier.png" height="150" align="right"/>
 <!-- badges: end -->
 
 An R package for robust molecular subtype classification of **Head and Neck Squamous Cell Carcinoma (HNSC)**. This classifier assigns tumour samples to one of four TCGA-defined molecular subtypes — **Atypical**, **Basal**, **Classical**, and **Mesenchymal** — using a pre-trained random forest model coupled with pathway-level normalisation via single-sample gene set enrichment analysis (ssGSEA).
 
-Online tutorial is available at: <https://cv.ronleecww.cn/HNSCclassifier/articles/HNSCclassifier_vignette.html>.
+Online tutorial is available at: <https://jli-cbb.github.io/HNSCclassifier/articles/HNSCclassifier_vignette.html>.
 
 
 ## Table of Contents
@@ -82,11 +82,11 @@ if (!requireNamespace("remotes", quietly = TRUE))
     install.packages("remotes")
 
 # Fast installation (skip vignette building)
-remotes::install_github("Ronlee12355/HNSCclassifier",
+remotes::install_github("JLI-CBB/HNSCclassifier",
                         build_vignettes = FALSE)
 
 # Or build vignettes locally (requires knitr, rmarkdown)
-remotes::install_github("Ronlee12355/HNSCclassifier",
+remotes::install_github("JLI-CBB/HNSCclassifier",
                         build_vignettes = TRUE)
 ```
 
@@ -252,7 +252,7 @@ Step-by-step instructions guiding users through:
 3. Running the classification and interpreting results
 
 ### 3. Contact Tab
-Author contact information and a link to the [GitHub Issues](https://github.com/Ronlee12355/HNSCclassifier/issues) page for bug reports and feature requests.
+Author contact information and a link to the [GitHub Issues](https://github.com/JLI-CBB/HNSCclassifier/issues) page for bug reports and feature requests.
 
 ---
 
@@ -270,7 +270,7 @@ Author contact information and a link to the [GitHub Issues](https://github.com/
 
 ## Contributing
 
-Bug reports, feature suggestions, and contributions are welcome via the [GitHub Issues](https://github.com/Ronlee12355/HNSCclassifier/issues) page.
+Bug reports, feature suggestions, and contributions are welcome via the [GitHub Issues](https://github.com/JLI-CBB/HNSCclassifier/issues) page.
 
 ## License
 

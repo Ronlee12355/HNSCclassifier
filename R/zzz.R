@@ -8,8 +8,8 @@
     " version ",
     version,
     "
-Github page: https://github.com/Ronlee12355/HNSCclassifier
-Report bugs: https://github.com/Ronlee12355/HNSCclassifier/issues
+Github page: https://github.com/JLI-CBB/HNSCclassifier
+Report bugs: https://github.com/JLI-CBB/HNSCclassifier/issues
 
 This message can be suppressed by:
   suppressPackageStartupMessages(library(HNSCclassifier))

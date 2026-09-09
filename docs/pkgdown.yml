@@ -3,4 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   HNSCclassifier_vignette: HNSCclassifier_vignette.html
-last_built: 2026-09-08T09:46Z
+last_built: 2026-09-09T03:47Z
+urls:
+  reference: https://jli-cbb.github.io/HNSCclassifier/reference
+  article: https://jli-cbb.github.io/HNSCclassifier/articles
